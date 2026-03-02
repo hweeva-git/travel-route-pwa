@@ -9,6 +9,7 @@ export default async function handler(
   res: ServerResponse
 ) {
   const placeId = (Array.isArray(req.query.id) ? req.query.id[0] : req.query.id) ?? ''
+  const languageCode = (Array.isArray(req.query.languageCode) ? req.query.languageCode[0] : req.query.languageCode) ?? 'ko'
   const fieldMask = req.headers['x-goog-fieldmask'] as string | undefined
 
   if (!placeId) {
@@ -18,7 +19,7 @@ export default async function handler(
   }
 
   try {
-    const apiRes = await fetch(`https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}`, {
+    const apiRes = await fetch(`https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}?languageCode=${languageCode}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

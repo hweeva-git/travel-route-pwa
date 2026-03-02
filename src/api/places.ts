@@ -71,7 +71,7 @@ export async function fetchAutocomplete(input: string): Promise<PlacePrediction[
 export async function fetchPlaceDetails(placeId: string): Promise<PlaceDetails | null> {
   if (!getApiKey()) return null
 
-  const url = `/api/gplaces-details?id=${encodeURIComponent(placeId)}`
+  const url = `/api/gplaces-details?id=${encodeURIComponent(placeId)}&languageCode=ko`
   const res = await fetch(url, {
     method: 'GET',
     headers: {
