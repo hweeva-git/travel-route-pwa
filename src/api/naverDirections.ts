@@ -1,6 +1,7 @@
 export interface NaverDrivingResult {
   distanceMeters: number
   durationMinutes: number
+  taxiFare?: number  // 네이버 API가 직접 제공하는 실제 택시 요금 (원)
 }
 
 /**
@@ -38,7 +39,8 @@ export async function fetchNaverDrivingDirections(
 
     return {
       distanceMeters: route.summary.distance,                     // 단위: m
-      durationMinutes: Math.round(route.summary.duration / 60000) // 단위: ms → 분
+      durationMinutes: Math.round(route.summary.duration / 60000),// 단위: ms → 분
+      taxiFare: route.summary.taxiFare ?? undefined               // 네이버 제공 실제 택시 요금
     }
   } catch (e) {
     console.warn('[Naver Directions] 요청 실패:', e)

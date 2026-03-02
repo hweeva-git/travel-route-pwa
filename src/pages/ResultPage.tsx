@@ -82,14 +82,15 @@ export function ResultPage({ places, onBack }: ResultPageProps) {
 
         let drive: SegmentInfo['taxi']
         if (driveRes) {
+          const distanceKm = driveRes.distanceMeters / 1000
+          // 한국: 네이버 API가 직접 제공하는 taxiFare 우선 사용
+          const fare = 'taxiFare' in driveRes && driveRes.taxiFare
+            ? driveRes.taxiFare
+            : calculateTaxiFare({ distanceKm, durationMinutes: driveRes.durationMinutes, region })
           drive = {
             durationMinutes: driveRes.durationMinutes,
-            distanceKm: driveRes.distanceMeters / 1000,
-            fare: calculateTaxiFare({
-              distanceKm: driveRes.distanceMeters / 1000,
-              durationMinutes: driveRes.durationMinutes,
-              region
-            })
+            distanceKm,
+            fare
           }
         } else if (isKorea) {
           // 네이버 API 실패 시 Haversine fallback
