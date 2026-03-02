@@ -1,4 +1,4 @@
-import { getApiKey, getRoutesBaseUrl } from './client'
+import { getApiKey } from './client'
 import type { TransitOption } from '../types'
 
 /** Routes API duration string "3600s" -> minutes */
@@ -28,7 +28,7 @@ export async function fetchTransitRoute(
   const key = getApiKey()
   if (!key) return null
 
-  const url = `${getRoutesBaseUrl()}/directions/v2:computeRoutes`
+  const url = '/api/groutes'
 
   // 9 AM JST = 0 AM UTC. 새벽(JST 0~5시)에는 다음 0:00 UTC(= 9:00 JST)를 사용
   const nowMs = Date.now()

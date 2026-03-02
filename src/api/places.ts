@@ -1,4 +1,4 @@
-import { getApiKey, getPlacesBaseUrl } from './client'
+import { getApiKey } from './client'
 import { geocodeAddress } from './geocode'
 
 export interface PlacePrediction {
@@ -26,12 +26,11 @@ export async function fetchAutocomplete(input: string): Promise<PlacePrediction[
     return []
   }
 
-  const url = `${getPlacesBaseUrl()}/v1/places:autocomplete`
+  const url = '/api/gplaces-autocomplete'
   const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-Goog-Api-Key': key,
       'X-Goog-FieldMask': 'suggestions.placePrediction.placeId,suggestions.placePrediction.text,suggestions.placePrediction.structuredFormat'
     },
     body: JSON.stringify({
@@ -72,14 +71,12 @@ export async function fetchAutocomplete(input: string): Promise<PlacePrediction[
 export async function fetchPlaceDetails(placeId: string): Promise<PlaceDetails | null> {
   if (!getApiKey()) return null
 
-  const url = `${getPlacesBaseUrl()}/v1/places/${encodeURIComponent(placeId)}`
+  const url = `/api/gplaces-details?id=${encodeURIComponent(placeId)}`
   const res = await fetch(url, {
     method: 'GET',
     headers: {
-      'X-Goog-Api-Key': getApiKey(),
       'X-Goog-FieldMask': 'id,displayName,formattedAddress,location'
-    },
-    referrerPolicy: 'no-referrer'
+    }
   })
 
   if (!res.ok) return null

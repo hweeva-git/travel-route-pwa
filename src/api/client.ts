@@ -1,22 +1,15 @@
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
-// 항상 서버리스 프록시 경로 사용 (CORS 방지)
-const MAPS_BASE = '/api/google'
-const PLACES_BASE = '/api/places'
-const ROUTES_BASE = '/api/routes'
 const NAVER_BASE = '/api/naver'
 
+/**
+ * Google Maps API (Directions, Geocoding) 용 URL 생성.
+ * 경로를 ?p= 쿼리 파라미터로 전달해 Vercel 라우팅 충돌 방지.
+ */
 export function buildGoogleMapsUrl(path: string, params: Record<string, string>): string {
-  const search = new URLSearchParams(params).toString()
-  return `${MAPS_BASE}${path}?${search}`
-}
-
-export function getPlacesBaseUrl(): string {
-  return PLACES_BASE
-}
-
-export function getRoutesBaseUrl(): string {
-  return ROUTES_BASE
+  const { key: _key, ...rest } = params // key는 서버에서 주입하므로 제거
+  const search = new URLSearchParams({ p: path.replace(/^\//, ''), ...rest }).toString()
+  return `/api/gmap?${search}`
 }
 
 export function getApiKey(): string {
