@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- 배경 원 -->
+  <circle cx="32" cy="32" r="32" fill="#0ea5e9"/>
+  <!-- 비행기 몸체 -->
+  <g transform="translate(32,32) rotate(-35) translate(-32,-32)">
+    <path d="M32 14 L44 30 L32 28 L20 30 Z" fill="white" opacity="0.95"/>
+    <path d="M32 28 L36 42 L32 40 L28 42 Z" fill="white" opacity="0.85"/>
+    <path d="M32 26 L48 34 L44 36 L32 30 Z" fill="white" opacity="0.9"/>
+    <path d="M32 26 L16 34 L20 36 L32 30 Z" fill="white" opacity="0.9"/>
+  </g>
+  <!-- 위치 핀 점 -->
+  <circle cx="44" cy="44" r="6" fill="#fbbf24"/>
+  <circle cx="44" cy="44" r="3" fill="#0ea5e9"/>
+</svg>
