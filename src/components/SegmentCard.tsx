@@ -29,9 +29,11 @@ export function SegmentCard({ segment, index, taxiRegion = 'default' }: SegmentC
   const mapsUrl = `https://www.google.com/maps/dir/?api=1&${originParam}&${destParam}`
   const mapsTransitUrl = `${mapsUrl}&travelmode=transit`
 
+  const showTaxi = taxiRegion === 'kr' || taxiRegion === 'jp'
+
   const tabs: { key: 'transit' | 'taxi' | 'walking'; label: string }[] = [
     { key: 'transit', label: '🚇 대중교통' },
-    { key: 'taxi', label: '🚕 택시' },
+    ...(showTaxi ? [{ key: 'taxi' as const, label: '🚕 택시' }] : []),
     { key: 'walking', label: '🚶 도보' },
   ]
 
