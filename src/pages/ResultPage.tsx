@@ -41,6 +41,7 @@ export function ResultPage({ places, onBack }: ResultPageProps) {
   const [ordered, setOrdered] = useState<Place[]>([])
   const [segments, setSegments] = useState<SegmentInfo[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [region, setRegion] = useState<TaxiRegion>(() => inferTaxiRegion(places))
 
   useEffect(() => {
@@ -125,7 +126,13 @@ export function ResultPage({ places, onBack }: ResultPageProps) {
       setLoading(false)
     }
 
-    load()
+    load().catch((err) => {
+      console.error('[경로 계산 오류]', err)
+      if (!cancelled) {
+        setError('경로 계산 중 오류가 발생했습니다. 다시 시도해 주세요.')
+        setLoading(false)
+      }
+    })
     return () => { cancelled = true }
   }, [ordered, region])
 
@@ -190,6 +197,18 @@ export function ResultPage({ places, onBack }: ResultPageProps) {
         <div style={{ textAlign: 'center', padding: 60, color: '#94a3b8' }}>
           <div style={{ fontSize: 32, marginBottom: 12 }}>✈️</div>
           <div>경로 계산 중...</div>
+        </div>
+      ) : error ? (
+        <div style={{ textAlign: 'center', padding: 60 }}>
+          <div style={{ fontSize: 32, marginBottom: 12 }}>⚠️</div>
+          <div style={{ color: '#ef4444', marginBottom: 16 }}>{error}</div>
+          <button
+            type="button"
+            onClick={() => { setError(null); setLoading(true); setOrdered([...ordered]) }}
+            style={{ padding: '10px 20px', background: '#0ea5e9', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer', fontWeight: 600 }}
+          >
+            다시 시도
+          </button>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>

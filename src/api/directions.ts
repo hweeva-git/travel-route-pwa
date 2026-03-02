@@ -72,49 +72,59 @@ export async function fetchTransitDirections(origin: { lat: number; lng: number 
 export async function fetchDrivingDirections(origin: { lat: number; lng: number }, destination: { lat: number; lng: number }): Promise<DirectionsLeg | null> {
   if (!getApiKey()) return null
 
-  const url = buildGoogleMapsUrl('/maps/api/directions/json', {
-    origin: `${origin.lat},${origin.lng}`,
-    destination: `${destination.lat},${destination.lng}`,
-    mode: 'driving',
-    key: getApiKey(),
-    language: 'ko'
-  })
-  const res = await fetch(url, { referrerPolicy: 'no-referrer' })
-  const data = await res.json()
-  if (data.status !== 'OK' || !data.routes?.[0]?.legs?.[0]) return null
+  try {
+    const url = buildGoogleMapsUrl('/maps/api/directions/json', {
+      origin: `${origin.lat},${origin.lng}`,
+      destination: `${destination.lat},${destination.lng}`,
+      mode: 'driving',
+      key: getApiKey(),
+      language: 'ko'
+    })
+    const res = await fetch(url, { referrerPolicy: 'no-referrer' })
+    const data = await res.json()
+    if (data.status !== 'OK' || !data.routes?.[0]?.legs?.[0]) return null
 
-  const leg = data.routes[0].legs[0]
-  return {
-    distanceMeters: leg.distance?.value ?? 0,
-    durationMinutes: Math.round((leg.duration?.value ?? 0) / 60),
-    steps: (leg.steps || []).map((s: { html_instructions?: string }) => ({
-      instruction: (s.html_instructions || '').replace(/<[^>]*>/g, '').trim(),
-      transitLine: undefined
-    }))
+    const leg = data.routes[0].legs[0]
+    return {
+      distanceMeters: leg.distance?.value ?? 0,
+      durationMinutes: Math.round((leg.duration?.value ?? 0) / 60),
+      steps: (leg.steps || []).map((s: { html_instructions?: string }) => ({
+        instruction: (s.html_instructions || '').replace(/<[^>]*>/g, '').trim(),
+        transitLine: undefined
+      }))
+    }
+  } catch (e) {
+    console.warn('[Directions API driving] 요청 실패:', e)
+    return null
   }
 }
 
 export async function fetchWalkingDirections(origin: { lat: number; lng: number }, destination: { lat: number; lng: number }): Promise<DirectionsLeg | null> {
   if (!getApiKey()) return null
 
-  const url = buildGoogleMapsUrl('/maps/api/directions/json', {
-    origin: `${origin.lat},${origin.lng}`,
-    destination: `${destination.lat},${destination.lng}`,
-    mode: 'walking',
-    key: getApiKey(),
-    language: 'ko'
-  })
-  const res = await fetch(url, { referrerPolicy: 'no-referrer' })
-  const data = await res.json()
-  if (data.status !== 'OK' || !data.routes?.[0]?.legs?.[0]) return null
+  try {
+    const url = buildGoogleMapsUrl('/maps/api/directions/json', {
+      origin: `${origin.lat},${origin.lng}`,
+      destination: `${destination.lat},${destination.lng}`,
+      mode: 'walking',
+      key: getApiKey(),
+      language: 'ko'
+    })
+    const res = await fetch(url, { referrerPolicy: 'no-referrer' })
+    const data = await res.json()
+    if (data.status !== 'OK' || !data.routes?.[0]?.legs?.[0]) return null
 
-  const leg = data.routes[0].legs[0]
-  return {
-    distanceMeters: leg.distance?.value ?? 0,
-    durationMinutes: Math.round((leg.duration?.value ?? 0) / 60),
-    steps: (leg.steps || []).map((s: { html_instructions?: string }) => ({
-      instruction: (s.html_instructions || '').replace(/<[^>]*>/g, '').trim(),
-      transitLine: undefined
-    }))
+    const leg = data.routes[0].legs[0]
+    return {
+      distanceMeters: leg.distance?.value ?? 0,
+      durationMinutes: Math.round((leg.duration?.value ?? 0) / 60),
+      steps: (leg.steps || []).map((s: { html_instructions?: string }) => ({
+        instruction: (s.html_instructions || '').replace(/<[^>]*>/g, '').trim(),
+        transitLine: undefined
+      }))
+    }
+  } catch (e) {
+    console.warn('[Directions API walking] 요청 실패:', e)
+    return null
   }
 }
