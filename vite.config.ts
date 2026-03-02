@@ -29,14 +29,23 @@ export default defineConfig(({ mode }) => {
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        navigateFallback: 'index.html',
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/maps\.googleapis\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-maps-cache',
-              expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 30 }
-            }
+            handler: 'NetworkOnly'
+          },
+          {
+            urlPattern: /^https:\/\/places\.googleapis\.com\/.*/i,
+            handler: 'NetworkOnly'
+          },
+          {
+            urlPattern: /^https:\/\/routes\.googleapis\.com\/.*/i,
+            handler: 'NetworkOnly'
+          },
+          {
+            urlPattern: /^https:\/\/maps\.apigw\.ntruss\.com\/.*/i,
+            handler: 'NetworkOnly'
           }
         ]
       }
