@@ -29,11 +29,9 @@ export function SegmentCard({ segment, index, taxiRegion = 'default' }: SegmentC
   const mapsUrl = `https://www.google.com/maps/dir/?api=1&${originParam}&${destParam}`
   const mapsTransitUrl = `${mapsUrl}&travelmode=transit`
 
-  const showTaxi = taxiRegion === 'kr' || taxiRegion === 'jp'
-
   const tabs: { key: 'transit' | 'taxi' | 'walking'; label: string }[] = [
     { key: 'transit', label: '🚇 대중교통' },
-    ...(showTaxi ? [{ key: 'taxi' as const, label: '🚕 택시' }] : []),
+    { key: 'taxi', label: '🚕 택시' },
     { key: 'walking', label: '🚶 도보' },
   ]
 
@@ -198,27 +196,29 @@ export function SegmentCard({ segment, index, taxiRegion = 'default' }: SegmentC
             <div style={{ marginTop: 6, color: '#64748b' }}>
               거리: {segment.taxi.distanceKm.toFixed(1)}km
             </div>
-            <div style={{ marginTop: 6, fontWeight: 700, fontSize: 16, color: '#0f172a' }}>
-              예상 요금: 약{' '}
-              {taxiRegion === 'jp'
-                ? `¥${segment.taxi.fare.toLocaleString()}`
-                : taxiRegion === 'kr'
-                  ? `${segment.taxi.fare.toLocaleString()}원`
-                  : `${segment.taxi.fare.toLocaleString()} (참고)`}
-            </div>
-            {segment.taxi.isEstimated && (
-              <div style={{ marginTop: 6, fontSize: 11, color: '#f59e0b', background: '#fffbeb', padding: '4px 8px', borderRadius: 4 }}>
-                ※ 직선거리 기준 추정값 (Google Maps 한국 자동차 경로 미지원)
-              </div>
+            {(taxiRegion === 'kr' || taxiRegion === 'jp') && (
+              <>
+                <div style={{ marginTop: 6, fontWeight: 700, fontSize: 16, color: '#0f172a' }}>
+                  예상 요금: 약{' '}
+                  {taxiRegion === 'jp'
+                    ? `¥${segment.taxi.fare.toLocaleString()}`
+                    : `${segment.taxi.fare.toLocaleString()}원`}
+                </div>
+                {segment.taxi.isEstimated && (
+                  <div style={{ marginTop: 6, fontSize: 11, color: '#f59e0b', background: '#fffbeb', padding: '4px 8px', borderRadius: 4 }}>
+                    ※ 직선거리 기준 추정값 (Google Maps 한국 자동차 경로 미지원)
+                  </div>
+                )}
+                {taxiRegion === 'jp' && (
+                  <div style={{ marginTop: 6, fontSize: 11, color: '#6366f1', background: '#eef2ff', padding: '4px 8px', borderRadius: 4 }}>
+                    ※ 도쿄 기준 추정값 (지역별 요금 상이)
+                  </div>
+                )}
+                <div style={{ marginTop: 6, fontSize: 11, color: '#94a3b8' }}>
+                  참고용이며, 실제 요금은 도시·시간대에 따라 다를 수 있습니다.
+                </div>
+              </>
             )}
-            {taxiRegion === 'jp' && (
-              <div style={{ marginTop: 6, fontSize: 11, color: '#6366f1', background: '#eef2ff', padding: '4px 8px', borderRadius: 4 }}>
-                ※ 도쿄 기준 추정값 (지역별 요금 상이)
-              </div>
-            )}
-            <div style={{ marginTop: 6, fontSize: 11, color: '#94a3b8' }}>
-              참고용이며, 실제 요금은 도시·시간대에 따라 다를 수 있습니다.
-            </div>
           </div>
         )}
 
