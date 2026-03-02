@@ -32,13 +32,6 @@ export function calculateTaxiFare(params: TaxiFareParams): number {
     return calculateTokyoFare(distanceKm, durationMinutes)
   }
 
-  // kr는 네이버 API taxiFare를 직접 사용하므로 여기선 fallback용
-  if (region === 'kr') {
-    const KR = { base: 4800, baseKm: 1.6, perKm: 763, perMin: 200 * 0.15 }
-    if (distanceKm <= KR.baseKm) return KR.base
-    return Math.round(KR.base + (distanceKm - KR.baseKm) * KR.perKm + durationMinutes * KR.perMin)
-  }
-
   const fare = DEFAULT_RATES.base + distanceKm * DEFAULT_RATES.perKm + DEFAULT_RATES.perMin * durationMinutes
   return Math.round(Math.max(0, fare))
 }
