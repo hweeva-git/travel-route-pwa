@@ -1,5 +1,3 @@
-import { getNaverBaseUrl } from './client'
-
 export interface NaverDrivingResult {
   distanceMeters: number
   durationMinutes: number
@@ -21,10 +19,9 @@ export async function fetchNaverDrivingDirections(
     option: 'traoptimal'
   })
 
-  const url = `${getNaverBaseUrl()}/map-direction-15/v1/driving?${params}`
+  const url = `/api/naver-drive?${params}`
 
   try {
-    // 인증 헤더는 vite.config.ts 프록시에서 server-side로 주입
     const res = await fetch(url)
 
     if (!res.ok) {
