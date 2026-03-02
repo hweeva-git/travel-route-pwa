@@ -21,8 +21,8 @@ export default async function handler(
     const naverRes = await fetch(targetUrl, {
       method: 'GET',
       headers: {
-        'x-ncp-apigw-api-key-id': process.env.VITE_NAVER_CLIENT_ID ?? '',
-        'x-ncp-apigw-api-key': process.env.VITE_NAVER_CLIENT_SECRET ?? '',
+        'x-ncp-apigw-api-key-id': process.env.NAVER_CLIENT_ID ?? process.env.VITE_NAVER_CLIENT_ID ?? '',
+        'x-ncp-apigw-api-key': process.env.NAVER_CLIENT_SECRET ?? process.env.VITE_NAVER_CLIENT_SECRET ?? '',
         'Content-Type': 'application/json'
       }
     })

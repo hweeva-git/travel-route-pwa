@@ -18,7 +18,7 @@ export default async function handler(
     const v = Array.isArray(value) ? value[0] : value
     queryParams.set(key, v)
   }
-  queryParams.set('key', process.env.VITE_GOOGLE_MAPS_API_KEY ?? '')
+  queryParams.set('key', process.env.GOOGLE_MAPS_API_KEY ?? process.env.VITE_GOOGLE_MAPS_API_KEY ?? '')
 
   const targetUrl = `https://maps.googleapis.com/${p}?${queryParams}`
 
