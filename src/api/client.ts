@@ -1,8 +1,9 @@
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
-const MAPS_BASE = import.meta.env.DEV ? '/api/google' : 'https://maps.googleapis.com'
-const PLACES_BASE = import.meta.env.DEV ? '/api/places' : 'https://places.googleapis.com'
-const ROUTES_BASE = import.meta.env.DEV ? '/api/routes' : 'https://routes.googleapis.com'
+// 항상 서버리스 프록시 경로 사용 (CORS 방지)
+const MAPS_BASE = '/api/google'
+const PLACES_BASE = '/api/places'
+const ROUTES_BASE = '/api/routes'
 const NAVER_BASE = '/api/naver'
 
 export function buildGoogleMapsUrl(path: string, params: Record<string, string>): string {
