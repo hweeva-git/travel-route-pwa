@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg'],
+      includeAssets: ['favicon.svg', 'app-icon.png'],
       manifest: {
         name: 'Travel Route Planner',
         short_name: 'Route Planner',
@@ -20,10 +20,15 @@ export default defineConfig(({ mode }) => {
         theme_color: '#0ea5e9',
         icons: [
           {
+            src: 'app-icon.png',
+            sizes: '1024x1024',
+            type: 'image/png',
+            purpose: 'any maskable'
+          },
+          {
             src: 'favicon.svg',
             sizes: 'any',
-            type: 'image/svg+xml',
-            purpose: 'any maskable'
+            type: 'image/svg+xml'
           }
         ]
       },
